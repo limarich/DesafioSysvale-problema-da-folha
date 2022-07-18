@@ -1,14 +1,5 @@
-entrada = [{"id": 1, "nome": "richard", "salario": 1200}, {
-    "id": 2, "nome": "david", "salario": 1800}, {"id": 3, "nome": "bianca", "salario": 2500}]
-dadosEmpresa = [{"id": 1, "nome": "richard", "salario": 2000}, {
-    "id": 2, "nome": "david", "salario": 1500}, {"id": 3, "nome": "bianca", "salario": 2500}]
-lenEntrada = len(entrada)
-colaboradoresErrados = []
-totalEntrada = 0
-totalEmpresa = 0
-difMedia = 0
 # leitura da entrada de dados
-def readEntry():
+def readEntry(entry):
     print("Iniciando leitura de dados...")
     print("Informe os dados a seguir:")
     aux = 's'
@@ -16,16 +7,42 @@ def readEntry():
         id = input("Informe o ID:")
         name = input("Informe o Nome:")
         salary = float(input("Informe o Salário:"))
+        entry.append({"id":id, "nome":name, "salario":salary})
         aux = input("Deseja informar mais dados?[s/n]")
+# detecção de salarios errados
+def createReport(entry1, entry2):
+    wrongSalaries = []
+    total1 = 0
+    total2 = 0
+    dif = 0
+    average = 0
+    if(len(entry1) == len(entry2)):
+        for i in range(0,len(entry1)):
+            # verifica quais salarios estão incorretos
+            print(i)
+            if(entry1[i]["salario"] != entry2[i]["salario"]):
+                wrongSalaries.append({"id": entry1[i]["id"], "nome": entry1[i]["nome"], "salario": entry1[i]["salario"], "correto": entry2[i]["salario"]})
+            #diferença entre a entrada e os dados  da empresa 
+            total1 += entry1[i]["salario"]
+            total2 += entry2[i]["salario"]
+            # calculo da média
+        dif = total1-total2
+        average = dif/(i+1)
+        print("--"*20, "relatório", "--"*20)
+        print("Funcionários com salários errados: ")
+        for wrong in wrongSalaries:
+            print(f"[ID]: {wrong['id']}","__"*5, f"[NOME]: {wrong['nome']}","__"*5, f"[SALARIO]: {wrong['salario']}", "__"*5, f"[SALARIO CORRETO]: {wrong['correto']}","__"*5, f"[DIFERENÇA]: {wrong['salario']-wrong['correto']}")
+        print("\n\n")
+        print("diferença total entre a folha de referencia e da empresa especializada:","__"*5, dif)
+        print("diferença média entre a folha de referencia e da empresa especializada:","__"*5, average)
+    else: 
+        print("Erro, numero de dados da empresa difere do numero de dados de entrada")
 
-if(lenEntrada == len(dadosEmpresa)):
-    for i in range(0, len(entrada)):
-        if(entrada[i]["salario"] != dadosEmpresa[i]["salario"]):
-            colaboradoresErrados.append(entrada[i])
-        totalEntrada += entrada[i]["salario"]
-        totalEmpresa += dadosEmpresa[i]["salario"]
-        difMedia += (entrada[i]["salario"] - dadosEmpresa[i]["salario"])
-# print(colaboradoresErrados)
-# print(totalEntrada-totalEmpresa)
-# print(difMedia/lenEntrada)
-readEntry()
+# execução do programa
+entrada1= []
+entrada2= []
+print("Dados de entrada")
+readEntry(entrada1)
+print("Dados da empresa")
+readEntry(entrada2)
+createReport(entrada1, entrada2)
